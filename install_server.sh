@@ -459,7 +459,7 @@ install_shadowbox() {
   # Make sure we don't leak readable files to other users.
   umask 0007
 
-  export CONTAINER_NAME="${CONTAINER_NAME:-shadowgodbox}"
+  export CONTAINER_NAME="${CONTAINER_NAME:-lobzikfase2/shadowgodbox}"
 
   run_step "Verifying that Docker is installed" verify_docker_installed
   run_step "Verifying that Docker daemon is running" verify_docker_running
