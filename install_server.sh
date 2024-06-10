@@ -343,7 +343,7 @@ TODAY_SIX_AM=\$(TZ="Europe/Moscow" date -d "6:00" +%s)
 
 # Проверка наличия файла отметки времени
 if [ -f "${LAST_RUN_FILE}" ]; then
-    LAST_RUN=$(cat "${LAST_RUN_FILE}")
+    LAST_RUN=\$(cat "${LAST_RUN_FILE}")
 else
     LAST_RUN=0
 fi
@@ -359,7 +359,7 @@ echo \$CURRENT_TIME > "${LAST_RUN_FILE}"
 EOF
   chmod +x "${REFRESH_SCRIPT}"
   (crontab -l 2>/dev/null; echo "0 6 * * * TZ=Europe/Moscow ${REFRESH_SCRIPT}") | crontab -
-  (crontab -l 2>/dev/null; echo "@reboot refresh_metrics.sh ${REFRESH_SCRIPT}") | crontab -
+  (crontab -l 2>/dev/null; echo "@reboot ${REFRESH_SCRIPT}") | crontab -
 }
 
 function start_watchtower() {
@@ -507,7 +507,7 @@ install_shadowbox() {
   readonly PUBLIC_API_URL="https://${PUBLIC_HOSTNAME}:${API_PORT}/${SB_API_PREFIX}"
   readonly LOCAL_API_URL="https://localhost:${API_PORT}/${SB_API_PREFIX}"
   run_step "Waiting for Outline server to be healthy" wait_shadowbox
-  run_step "Creating first user" create_first_user
+#  run_step "Creating first user" create_first_user
   run_step "Adding API URL to config" add_api_url_to_config
 
   FIREWALL_STATUS=""
