@@ -3,4 +3,4 @@
 
 *Команда для установки кастомного Outline:*
 
-`sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_outline.sh)"`
+`sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server.sh)"`
