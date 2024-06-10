@@ -17,7 +17,7 @@ if ! command -v git-lfs >/dev/null 2>&1; then
 fi
 
 # Скачиваем репозиторий к себе
-git clone https://github.com/Lobzikfase2/Custom-Outline-VPN.git && cd Custom-Outline-VPN && git lfs pull
+git clone "https://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@github.com/Lobzikfase2/Custom-Outline-VPN.git" && cd Custom-Outline-VPN && git lfs pull
 # Устанавливаем кастомный docker образ shadowbox из архива
 docker load -i shadowgodbox.tar
 # Выполняем установку Outline
