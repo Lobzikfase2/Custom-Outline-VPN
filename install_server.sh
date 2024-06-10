@@ -459,7 +459,7 @@ install_shadowbox() {
   # Make sure we don't leak readable files to other users.
   umask 0007
 
-  export CONTAINER_NAME="${CONTAINER_NAME:-lobzikfase2/shadowgodbox}"
+  export CONTAINER_NAME="${CONTAINER_NAME:-shadowgodbox}"
 
   run_step "Verifying that Docker is installed" verify_docker_installed
   run_step "Verifying that Docker daemon is running" verify_docker_running
@@ -476,7 +476,7 @@ install_shadowbox() {
   fi
   readonly API_PORT
   readonly ACCESS_CONFIG="${ACCESS_CONFIG:-${SHADOWBOX_DIR}/access.txt}"
-  readonly SB_IMAGE="${SB_IMAGE:-shadowgodbox:latest}"
+  readonly SB_IMAGE="${SB_IMAGE:-lobzikfase2/shadowgodbox:latest}"
 
   PUBLIC_HOSTNAME="${FLAGS_HOSTNAME:-${SB_PUBLIC_IP:-}}"
   if [[ -z "${PUBLIC_HOSTNAME}" ]]; then
