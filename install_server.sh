@@ -507,7 +507,7 @@ install_shadowbox() {
   readonly PUBLIC_API_URL="https://${PUBLIC_HOSTNAME}:${API_PORT}/${SB_API_PREFIX}"
   readonly LOCAL_API_URL="https://localhost:${API_PORT}/${SB_API_PREFIX}"
   run_step "Waiting for Outline server to be healthy" wait_shadowbox
-#  run_step "Creating first user" create_first_user
+  run_step "Creating first user" create_first_user
   run_step "Adding API URL to config" add_api_url_to_config
 
   FIREWALL_STATUS=""
