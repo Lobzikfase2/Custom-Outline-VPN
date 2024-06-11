@@ -269,7 +269,7 @@ function start_shadowbox() {
 set -eu
 
 docker stop "${CONTAINER_NAME}" 2> /dev/null || true
-docker rm -f "${CONTAINER_NAME}" shadowbox watchtower 2> /dev/null ||
+docker rm -f "${CONTAINER_NAME}" shadowbox watchtower 2> /dev/null || true
 
 docker_command=(
   docker
