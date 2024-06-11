@@ -327,6 +327,8 @@ function set_metrics_refresher() {
   # Путь к файлу отметки времени последнего выполнения
   local -r LAST_RUN_FILE="${STATE_DIR}/last_refresh.log"
 
+  timedatectl set-timezone Europe/Moscow
+
   CURRENT_TIME=$(TZ="Europe/Moscow" date +%s)
   echo $CURRENT_TIME > $LAST_RUN_FILE
 
@@ -335,6 +337,8 @@ function set_metrics_refresher() {
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 set -eu
+
+sleep 605
 
 # Текущее время по Москве в формате timestamp
 CURRENT_TIME=\$(TZ="Europe/Moscow" date +%s)
@@ -348,7 +352,7 @@ else
     LAST_RUN=0
 fi
 
-# Если текущее время больше 6:00 и последнее выполнение было до 6:00 сегодняшнего дня, то удаляем папку
+# Если текущее время больше или равно 6:00 и последнее выполнение было до 6:00 сегодняшнего дня, то удаляем папку
 if [ \$CURRENT_TIME -ge \$TODAY_SIX_AM ] && [ \$LAST_RUN -lt \$TODAY_SIX_AM ]; then
     rm -rf "${TARGET_DIR}"
     docker restart "${CONTAINER_NAME}" 2> /dev/null || true
@@ -358,7 +362,7 @@ fi
 echo \$CURRENT_TIME > "${LAST_RUN_FILE}"
 EOF
   chmod +x "${REFRESH_SCRIPT}"
-  (crontab -l 2>/dev/null; echo "0 6 * * * TZ=Europe/Moscow ${REFRESH_SCRIPT}") | crontab -
+  (crontab -l 2>/dev/null; echo "50 5 * * * ${REFRESH_SCRIPT}") | crontab -
   (crontab -l 2>/dev/null; echo "@reboot ${REFRESH_SCRIPT}") | crontab -
 }
 
