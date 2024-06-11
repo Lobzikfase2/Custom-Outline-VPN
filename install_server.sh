@@ -270,6 +270,7 @@ set -eu
 
 docker stop "${CONTAINER_NAME}" 2> /dev/null || true
 docker rm -f "${CONTAINER_NAME}" 2> /dev/null || true
+rm -rf /opt/outline
 
 docker_command=(
   docker
