@@ -270,7 +270,6 @@ set -eu
 
 docker stop "${CONTAINER_NAME}" 2> /dev/null || true
 docker rm -f "${CONTAINER_NAME}" 2> /dev/null || true
-rm -rf /opt/outline
 
 docker_command=(
   docker
@@ -471,6 +470,7 @@ install_shadowbox() {
 
   log_for_sentry "Creating Outline directory"
   export SHADOWBOX_DIR="${SHADOWBOX_DIR:-/opt/outline}"
+  rm -rf "${SHADOWBOX_DIR}"
   mkdir -p "${SHADOWBOX_DIR}"
   chmod u+s,ug+rwx,o-rwx "${SHADOWBOX_DIR}"
 
