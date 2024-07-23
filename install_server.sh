@@ -407,15 +407,15 @@ function add_api_url_to_config() {
 }
 
 function check_firewall() {
-  # TODO(JonathanDCohen) This is incorrect if access keys are using more than one port.
-  local -i ACCESS_KEY_PORT
   ACCESS_KEY_PORT=$(fetch --insecure "${LOCAL_API_URL}/access-keys" |
       docker exec -i "${CONTAINER_NAME}" node -e '
           const fs = require("fs");
           const accessKeys = JSON.parse(fs.readFileSync(0, {encoding: "utf-8"}));
           console.log(accessKeys["accessKeys"][0]["port"]);
       ') || return
+  ACCESS_KEY_PORT=$((ACCESS_KEY_PORT))
   readonly ACCESS_KEY_PORT
+  export ACCESS_KEY_PORT
   if ! fetch --max-time 5 --cacert "${SB_CERTIFICATE_FILE}" "${PUBLIC_API_URL}/access-keys" >/dev/null; then
      log_error "BLOCKED"
      FIREWALL_STATUS="\
@@ -528,6 +528,7 @@ install_shadowbox() {
   # Output JSON.  This relies on apiUrl and certSha256 (hex characters) requiring
   # no string escaping.  TODO: look for a way to generate JSON that doesn't
   # require new dependencies.
+
   cat <<END_OF_SERVER_OUTPUT
 
 CONGRATULATIONS! Your Outline server is up and running.
@@ -539,6 +540,21 @@ $(echo -e "\033[1;32m{\"apiUrl\":\"$(get_field_value apiUrl)\",\"certSha256\":\"
 
 ${FIREWALL_STATUS}
 END_OF_SERVER_OUTPUT
+
+api_url=$(get_field_value apiUrl)
+ip=$(echo $api_url | awk -F'[/:]' '{print $4}')
+api_port=$(echo $api_url | awk -F'[/:]' '{print $5}')
+password=$(echo $api_url | awk -F'/' '{print $NF}')
+cert=$(get_field_value certSha256)
+
+echo -e "\033[1;34m{
+  \"ip\": \"${ip}\",
+  \"api_port\": \"${api_port}\",
+  \"vpn_port\": \"$(ACCESS_KEY_PORT)\",
+  \"password\": \"$(password)\",
+  \"cert\": \"$(cert)\"
+}\033[0m"
+
 } # end of install_shadowbox
 
 function is_valid_port() {
