@@ -541,19 +541,19 @@ $(echo -e "\033[1;32m{\"apiUrl\":\"$(get_field_value apiUrl)\",\"certSha256\":\"
 ${FIREWALL_STATUS}
 END_OF_SERVER_OUTPUT
 
-api_url=$(get_field_value apiUrl)
-ip=$(echo $api_url | awk -F'[/:]' '{print $4}')
-api_port=$(echo $api_url | awk -F'[/:]' '{print $5}')
-password=$(echo $api_url | awk -F'/' '{print $NF}')
-cert=$(get_field_value certSha256)
+  api_url=$(get_field_value apiUrl)
+  ip=$(echo $api_url | awk -F'[/:]' '{print $4}')
+  api_port=$(echo $api_url | awk -F'[/:]' '{print $5}')
+  password=$(echo $api_url | awk -F'/' '{print $NF}')
+  cert=$(get_field_value certSha256)
 
-echo -e "\033[1;34m{
-  \"ip\": \"${ip}\",
-  \"api_port\": \"${api_port}\",
-  \"vpn_port\": \"$(ACCESS_KEY_PORT)\",
-  \"password\": \"$(password)\",
-  \"cert\": \"$(cert)\"
-}\033[0m"
+  echo -e "\033[34m{
+    \"ip\": \"${ip}\",
+    \"api_port\": ${api_port},
+    \"vpn_port\": ${ACCESS_KEY_PORT},
+    \"password\": \"${password}\",
+    \"cert\": \"${cert}\"
+  }\033[0m"
 
 } # end of install_shadowbox
 
