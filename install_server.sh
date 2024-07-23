@@ -547,13 +547,14 @@ END_OF_SERVER_OUTPUT
   password=$(echo $api_url | awk -F'/' '{print $NF}')
   cert=$(get_field_value certSha256)
 
-  echo -e "\033[34m{
+  echo -e "\033[1;36m{
     \"ip\": \"${ip}\",
     \"api_port\": ${api_port},
     \"vpn_port\": ${ACCESS_KEY_PORT},
     \"password\": \"${password}\",
     \"cert\": \"${cert}\"
-  }\033[0m"
+}\033[0m"
+  echo
 
 } # end of install_shadowbox
 
