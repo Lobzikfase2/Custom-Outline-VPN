@@ -77,6 +77,11 @@ function command_exists {
   command -v "$@" &> /dev/null
 }
 
+function get_access_key_port() {
+    read -rp "Введите желаемый порт vpn: " CUSTOM_ACCESS_KEY_PORT
+    CUSTOM_ACCESS_KEY_PORT=$(echo "$CUSTOM_ACCESS_KEY_PORT" | xargs)
+}
+
 function log_for_sentry() {
   if [[ -n "${SENTRY_LOG_FILE}" ]]; then
     echo "[$(date "+%Y-%m-%d@%H:%M:%S")] install_server.sh" "$@" >> "${SENTRY_LOG_FILE}"
@@ -249,11 +254,6 @@ function join() {
   echo "$*"
 }
 
-function get_access_key_port() {
-    read -rp "Введите желаемый порт vpn: " CUSTOM_ACCESS_KEY_PORT
-    CUSTOM_ACCESS_KEY_PORT=$(echo "$CUSTOM_ACCESS_KEY_PORT" | xargs)
-}
-
 function write_config() {
   local -a config=()
   if (( FLAGS_KEYS_PORT != 0 )); then
@@ -296,7 +296,6 @@ docker_command=(
 
   # Port number and path prefix used by the server manager API.
   -e "SB_API_PORT=${API_PORT}"
-  -e "ACCESS_KEY_PORT=${CUSTOM_ACCESS_KEY_PORT}"
   -e "SB_API_PREFIX=${SB_API_PREFIX}"
 
   # Location of the API TLS certificate and key.
@@ -511,7 +510,6 @@ install_shadowbox() {
   run_step "Writing config" write_config
 
   run_step "Setting metrics refresher" set_metrics_refresher
-  get_access_key_port
   run_step "Starting Shadowgodbox" start_shadowbox
   # TODO(fortuna): Don't wait for Shadowbox to run this.
   #  run_step "Starting Watchtower" start_watchtower
@@ -641,9 +639,10 @@ function parse_flags() {
 
 function main() {
   trap finish EXIT
+  get_access_key_port
   declare FLAGS_HOSTNAME=""
   declare -i FLAGS_API_PORT=0
-  declare -i FLAGS_KEYS_PORT=0
+  declare -i FLAGS_KEYS_PORT=$CUSTOM_ACCESS_KEY_PORT
   parse_flags "$@"
   install_shadowbox
 }
