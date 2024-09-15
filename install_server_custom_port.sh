@@ -557,7 +557,7 @@ END_OF_SERVER_OUTPUT
     \"api_port\": ${api_port},
     \"vpn_port\": ${ACCESS_KEY_PORT},
     \"password\": \"${password}\",
-    \"cert\": \"${cert}\"
+    \"certificate\": \"${cert}\"
 }\033[0m"
   echo
 
