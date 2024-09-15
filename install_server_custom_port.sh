@@ -249,9 +249,9 @@ function join() {
   echo "$*"
 }
 
-function get_user_input() {
-    read -rp "Введите желаемый порт vpn: " vpn_port
-    vpn_port=$(echo "$vpn_port" | xargs)
+function get_access_key_port() {
+    read -rp "Введите желаемый порт vpn: " CUSTOM_ACCESS_KEY_PORT
+    CUSTOM_ACCESS_KEY_PORT=$(echo "$CUSTOM_ACCESS_KEY_PORT" | xargs)
 }
 
 function write_config() {
@@ -296,7 +296,7 @@ docker_command=(
 
   # Port number and path prefix used by the server manager API.
   -e "SB_API_PORT=${API_PORT}"
-  -e "ACCESS_KEY_PORT=${ACCESS_KEY_PORT}"
+  -e "ACCESS_KEY_PORT=${CUSTOM_ACCESS_KEY_PORT}"
   -e "SB_API_PREFIX=${SB_API_PREFIX}"
 
   # Location of the API TLS certificate and key.
@@ -486,7 +486,6 @@ install_shadowbox() {
     API_PORT=${SB_API_PORT:-$(get_random_port)}
   fi
   readonly API_PORT
-  readonly ACCESS_KEY_PORT=$(get_user_input)
   readonly ACCESS_CONFIG="${ACCESS_CONFIG:-${SHADOWBOX_DIR}/access.txt}"
   readonly SB_IMAGE="${SB_IMAGE:-lobzikfase2/shadowgodbox:latest}"
 
@@ -512,6 +511,7 @@ install_shadowbox() {
   run_step "Writing config" write_config
 
   run_step "Setting metrics refresher" set_metrics_refresher
+  get_access_key_port
   run_step "Starting Shadowgodbox" start_shadowbox
   # TODO(fortuna): Don't wait for Shadowbox to run this.
   #  run_step "Starting Watchtower" start_watchtower
