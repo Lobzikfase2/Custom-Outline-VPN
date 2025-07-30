@@ -90,7 +90,7 @@ function verify_docker_installed() {
     return 0
   fi
   log_error "NOT INSTALLED"
-  if ! confirm "Would you like to install Docker? This will run 'curl https://get.docker.com/ | sh'."; then
+  if ! confirm "Would you like to install Docker? This will run manual installation."; then
     exit 0
   fi
   if ! run_step "Installing Docker" install_docker; then
@@ -124,8 +124,15 @@ function install_docker() {
     # See https://github.com/Jigsaw-Code/outline-server/issues/951.
     # We do this in a subprocess so the umask for the calling process is unaffected.
     umask 0022
-    fetch https://get.docker.com/ | sh
-  ) >&2
+    sudo apt-get remove docker.io docker-compose docker-compose-v2 docker-doc podman-docker
+    sudo rm -rf /var/lib/docker
+    sudo apt-get update
+    sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  )
 }
 
 function start_docker() {
@@ -205,9 +212,6 @@ function create_persisted_state_dir() {
 function safe_base64() {
   # Implements URL-safe base64 of stdin, stripping trailing = chars.
   # Writes result to stdout.
-  # TODO: this gives the following errors on Mac:
-  #   base64: invalid option -- w
-  #   tr: illegal option -- -
   local url_safe
   url_safe="$(base64 -w 0 - | tr '/+' '_-')"
   echo -n "${url_safe%%=*}"  # Strip trailing = chars
@@ -506,7 +510,6 @@ install_shadowbox() {
 
   run_step "Setting metrics refresher" set_metrics_refresher
   run_step "Starting Shadowgodbox" start_shadowbox
-  # TODO(fortuna): Don't wait for Shadowbox to run this.
   #  run_step "Starting Watchtower" start_watchtower
 
   readonly PUBLIC_API_URL="https://${PUBLIC_HOSTNAME}:${API_PORT}/${SB_API_PREFIX}"
@@ -526,7 +529,7 @@ install_shadowbox() {
   }
 
   # Output JSON.  This relies on apiUrl and certSha256 (hex characters) requiring
-  # no string escaping.  TODO: look for a way to generate JSON that doesn't
+  # no string escaping.
   # require new dependencies.
 
   cat <<END_OF_SERVER_OUTPUT
