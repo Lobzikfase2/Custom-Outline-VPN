@@ -9,3 +9,8 @@
 *Адрес VPN порта генерируется автоматически, чтобы задать его вручную при установке - команда:*
 
 `sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server_custom_port.sh)"`
+
+
+*Команда для улучшения настроек сервера и фикса example.com запроса в Outline:*
+
+`sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/enchant_outline.sh)"`
