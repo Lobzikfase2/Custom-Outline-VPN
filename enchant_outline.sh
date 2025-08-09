@@ -165,7 +165,10 @@ if ! nginx -t; then
     exit 1
 fi
 
-systemctl reload nginx
+# systemctl reload nginx
+sleep 0.5
+systemctl restart nginx
+sleep 0.5
 
 # Проверка работы nginx
 if ! ss -tuln | grep -qF "$IP_ADDR:80"; then
