@@ -146,10 +146,10 @@ server {
     location / {
         add_header Content-Type text/plain;
         access_log off;
-        return 204;
+        # return 204;
         # Либо вместо прямого ответа статусом, можно делать редирект на сервис гугла для проверки
-        # proxy_pass http://clients3.google.com/generate_204;
-        # proxy_set_header Host clients3.google.com;
+        proxy_pass http://clients3.google.com/generate_204;
+        proxy_set_header Host clients3.google.com;
     }
 }
 EOF
@@ -209,6 +209,7 @@ net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_congestion_control = bbr
 net.core.default_qdisc = fq
 net.core.somaxconn = 16384
+net.ipv4.tcp_max_syn_backlog = 1024
 EOF
 
 # Применение изменений
