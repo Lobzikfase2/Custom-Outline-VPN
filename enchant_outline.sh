@@ -42,17 +42,14 @@ fi
 
 REQUIRED_PKGS=("ipcalc" "nginx" "iproute2")
 MISSING_PKGS=()
-
 for pkg in "${REQUIRED_PKGS[@]}"; do
-    if ! dpkg -l | grep -q "^ii  $pkg "; then
-        MISSING_PKGS+=("$pkg")
-    fi
+  dpkg -s "$pkg" &>/dev/null || MISSING_PKGS+=("$pkg")
 done
 
-if [[ ${#MISSING_PKGS[@]} -gt 0 ]]; then
-    echo "Установка недостающих пакетов: ${MISSING_PKGS[*]}"
-    apt-get update
-    apt-get install -y "${MISSING_PKGS[@]}"
+if ((${#MISSING_PKGS[@]})); then
+  echo "Установка недостающих пакетов: ${MISSING_PKGS[*]}"
+  apt-get update
+  apt-get install -y "${MISSING_PKGS[@]}"
 fi
 
 # ================================================
