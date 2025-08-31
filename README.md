@@ -1,16 +1,85 @@
 # Custom-Outline-VPN
 **Кастомный OutlineVPN для Shadow-God VPN**
 
-*Команда для установки кастомного Outline:*
+---
 
-`sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server.sh)"`
+## 🚀 Установка
 
+### Базовая установка кастомного Outline
+```bash
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server.sh)"
+```
 
-*Адрес VPN порта генерируется автоматически, чтобы задать его вручную при установке - команда:*
+### Оптимизация конфигурации сервера
+```bash
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/enchant_outline.sh)"
+```
 
-`sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server_custom_port.sh)"`
+По умолчанию используется образ:  
+`lobzikfase2/shadowgodbox:latest`
 
+---
 
-*Команда для улучшения настроек сервера и фикса example.com запроса в Outline:*
+## ⚙️ Использование конкретного тега образа
 
-`sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/enchant_outline.sh)"`
+```bash
+export SB_IMAGE=lobzikfase2/shadowgodbox:latest && \
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server.sh)"
+```
+
+---
+
+## 🛠 Аргументы запуска install_server.sh
+
+- `--hostname` — hostname для доступа к API и ключам  
+- `--api-port` — порт для Management API  
+- `--keys-port` — порт для Access Keys  
+
+Чтобы флаги применялись корректно, нужно вызывать установку так:
+
+```bash
+# (Опционально: указываем версию образа)
+# export SB_IMAGE=lobzikfase2/shadowgodbox:1.1 && \
+
+wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server.sh | \
+sudo -E bash -s -- --keys-port 21824 --api-port 420
+```
+
+❌ Неправильный вариант (флаги не сработают):
+```bash
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/install_server.sh)" \
+ --keys-port 21824 --api-port 420
+```
+
+---
+
+## 📦 Установка через локальный архив образа
+
+1. Переносим архив на сервер:
+```bash
+scp shadowgodbox.tar <server-data>:~/
+```
+
+2. Загружаем образ в Docker:
+```bash
+cd ~ && sudo docker load -i shadowgodbox.tar && rm -rf shadowgodbox.tar
+```
+
+3. Тегируем образ:
+```bash
+sudo docker tag <image_id> lobzikfase2/shadowgodbox:latest
+```
+
+Или задаём переменную `SB_IMAGE` перед установкой.
+
+---
+
+## 🗑 Полный снос Outline с сервера
+```bash
+sudo docker stop shadowgodbox && \
+sudo docker container rm -f shadowgodbox && \
+sudo docker system prune -af && \
+sudo docker image prune -af && \
+sudo rm -rf /opt/outline && \
+sudo docker ps && sudo docker volume ls
+```
