@@ -366,8 +366,16 @@ fi
 echo \$CURRENT_TIME > "${LAST_RUN_FILE}"
 EOF
   chmod +x "${REFRESH_SCRIPT}"
-  (crontab -l 2>/dev/null; echo "50 5 * * * ${REFRESH_SCRIPT}") | crontab -
-  (crontab -l 2>/dev/null; echo "@reboot ${REFRESH_SCRIPT}") | crontab -
+  # (crontab -l 2>/dev/null; echo "50 5 * * * ${REFRESH_SCRIPT}") | crontab -
+  # (crontab -l 2>/dev/null; echo "@reboot ${REFRESH_SCRIPT}") | crontab -
+
+  # ежедневный запуск в 05:50
+  crontab -l 2>/dev/null | sed '/^[[:space:]]*#/d' | grep -Fqx "50 5 * * * ${REFRESH_SCRIPT}" || \
+    { crontab -l 2>/dev/null; echo "50 5 * * * ${REFRESH_SCRIPT}"; } | crontab -
+
+  # запуск при перезагрузке
+  crontab -l 2>/dev/null | sed '/^[[:space:]]*#/d' | grep -Fqx "@reboot ${REFRESH_SCRIPT}" || \
+    { crontab -l 2>/dev/null; echo "@reboot ${REFRESH_SCRIPT}"; } | crontab -
 }
 
 function start_watchtower() {
