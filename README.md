@@ -74,6 +74,30 @@ sudo docker tag <image_id> lobzikfase2/shadowgodbox:latest
 
 ---
 
+## ⬆️ Обновление Outline
+
+Для обновления сервера до последней версии образа или конкретного тега используется скрипт `update_outline.sh`.
+
+### Обновить до последнего `latest`
+```bash
+wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/update_outline.sh | \
+sudo -E bash
+```
+
+### Обновить до конкретного тега
+```bash
+wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/update_outline.sh | \
+sudo -E bash -s -- -t 1.9.421
+```
+
+### Указать свой репозиторий и тег
+```bash
+wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/update_outline.sh | \
+sudo -E bash -s -- -i lobzikfase2/shadowgodbox -t 1.9.421
+```
+
+---
+
 ## 🗑 Полный снос Outline с сервера
 ```bash
 sudo docker stop shadowgodbox && \
