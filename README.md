@@ -83,3 +83,25 @@ sudo docker image prune -af && \
 sudo rm -rf /opt/outline && \
 sudo docker ps && sudo docker volume ls
 ```
+
+---
+
+## 🔎 Проверка версии сервера
+
+### Удалённо
+```bash
+curl -sS -4k "https://<s-ip>:<s-api-port>/<s-api-password>/server" | grep -o '"version":"[^"]*"' | cut -d'"' -f4
+```
+
+### Локально
+
+1) С запросом на свой реальный IP:
+```bash
+curl -sS -4k "$(sudo sed -n 's/^apiUrl:\s*//p' /opt/outline/access.txt)/server" | grep -o '"version":"[^"]*"' | cut -d'"' -f4
+```
+
+2) Через localhost:
+```bash
+eval $(sudo sed -n 's/^apiUrl:https:\/\/[^:]*:\([0-9]*\)\/\(.*\)/PORT=\1 PASS=\2/p' /opt/outline/access.txt) && \
+curl -sS -4k "https://127.0.0.1:$PORT/$PASS/server" | grep -o '"version":"[^"]*"' | cut -d'"' -f4
+```
