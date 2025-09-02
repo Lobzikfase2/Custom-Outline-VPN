@@ -87,13 +87,13 @@ sudo -E bash
 ### Обновить до конкретного тега
 ```bash
 wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/update_outline.sh | \
-sudo -E bash -s -- -t 1.9.421
+sudo -E bash -s -- -t 1.1
 ```
 
 ### Указать свой репозиторий и тег
 ```bash
 wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/main/update_outline.sh | \
-sudo -E bash -s -- -i lobzikfase2/shadowgodbox -t 1.9.421
+sudo -E bash -s -- -i lobzikfase2/shadowgodbox -t 1.1
 ```
 
 ---
