@@ -1,6 +1,7 @@
 import logging
 import time
 from logging import Formatter, StreamHandler, FileHandler
+from typing import Optional
 
 from .pathes import log_file_path
 
@@ -15,7 +16,7 @@ logging.getLogger("requests").setLevel(logging.WARNING)
 
 class UTCFormatter(Formatter):
     @staticmethod
-    def converter(timestamp: float | None) -> time.struct_time:
+    def converter(timestamp: Optional[float]) -> time.struct_time:
         return time.gmtime(timestamp)
 
 
