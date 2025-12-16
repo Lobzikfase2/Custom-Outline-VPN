@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export PIP_ROOT_USER_ACTION=ignore
 
 REPO_OWNER="Lobzikfase2"
 REPO_NAME="Custom-Outline-VPN"
