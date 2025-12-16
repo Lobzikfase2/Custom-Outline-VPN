@@ -18,10 +18,27 @@ sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-O
 По умолчанию используется образ:  
 `lobzikfase2/shadowgodbox:latest`
 
-### Настройка сервера, в качестве шлюза
+---
+
+## 🌐 Настройка сервера в качестве шлюза (gate)
+
+Скрипт `install_gates_syncer.sh` используется для настройки сервера в качестве шлюза.
+
+### Базовый запуск (интерактивный ввод домена)
 ```bash
 sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gates_syncer.sh)"
 ```
+
+### Запуск с указанием домена через аргумент `--domain`
+Рекомендуется для автоматизированных и headless-установок:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gates_syncer.sh | \
+sudo bash -s -- --domain "example-proxy.com"
+```
+
+Если аргумент `--domain` не передан или передан пустым,  
+скрипт запросит домен интерактивно.
 
 ---
 
