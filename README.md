@@ -18,6 +18,11 @@ sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-O
 По умолчанию используется образ:  
 `lobzikfase2/shadowgodbox:latest`
 
+### Настройка сервера, в качестве шлюза
+```bash
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gates_syncer.sh)"
+```
+
 ---
 
 ## ⚙️ Использование конкретного тега образа
