@@ -29,7 +29,7 @@ def read_proxy_domain() -> Optional[str]:
     return None
 
 
-def get_sync_data(url: str) -> dict | None:
+def get_sync_data(url: str) -> Optional[dict]:
     logger.info(f"запрашиваю данные для синхронизации...")
     return make_safe_request(
         req_func=lambda: requests.get(url, timeout=5), json=True, retries_count=3

@@ -1,12 +1,12 @@
 import time
-from typing import Callable
+from typing import Callable, Optional
 
 import requests
 
 
 def make_safe_request(
     req_func: Callable[[], requests.Response], json: bool, retries_count: int
-) -> dict | None:
+) -> Optional[dict]:
     errors_count = 0
     while errors_count < retries_count:
         try:
@@ -15,15 +15,14 @@ def make_safe_request(
             errors_count += 1
             time.sleep(3)
             continue
-        match response.status_code:
-            case 200:
-                pass
-            case 404:
-                return None
-            case _:
-                errors_count += 1
-                time.sleep(3)
-                continue
+        if response.status_code == 200:
+            pass
+        elif response.status_code == 404:
+            return None
+        else:
+            errors_count += 1
+            time.sleep(3)
+            continue
         if not json:
             return None
         try:
