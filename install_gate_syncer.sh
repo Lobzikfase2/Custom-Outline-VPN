@@ -177,25 +177,11 @@ log "Файл домена создан"
 
 # 8) gate_syncer через git
 info "Загрузка gate_syncer из репозитория через git"
-TMPDIR_PATH="$(mktemp -d)"
-
-log "Клонирование репозитория (только нужная папка)..."
-# Клонируем только нужную папку
-git clone --depth 1 --no-checkout --filter=blob:none "${GIT_URL}" "${TMPDIR_PATH}/repo"
-cd "${TMPDIR_PATH}/repo"
-git sparse-checkout init --cone
-git sparse-checkout set gate_syncer
-git checkout "${REPO_BRANCH}"
-
-SRC_DIR="${TMPDIR_PATH}/repo/gate_syncer"
-
-if [[ ! -d "${SRC_DIR}" ]]; then
-  die "Папка gate_syncer не найдена в репозитории"
-fi
-
-rm -rf "${TARGET_DIR}"
-cp -a "${SRC_DIR}" "${TARGET_DIR}"
-log "gate_syncer установлен"
+rm -rf "${TARGET_DIR}" && \
+git clone --depth 1 "${GIT_URL}" /tmp/repo_tmp && \
+cp -a "/tmp/repo_tmp/gate_syncer" "${TARGET_DIR}" && \
+rm -rf /tmp/repo_tmp && \
+log "gate_syncer установлен" || die "Ошибка при копировании"
 
 # 9) root-only
 info "Права на пакет gate_syncer"
