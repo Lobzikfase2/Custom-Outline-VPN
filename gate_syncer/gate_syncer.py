@@ -80,11 +80,11 @@ def build_nginx_conf_string(servers: List[Dict]) -> str:
         conf_part = (
             "server {\n"
             f"    listen {gateway_port} reuseport;\n"  # noqa
-            f"    proxy_pass {ip}:{vpn_port}\n"
+            f"    proxy_pass {ip}:{vpn_port};\n"
             "}\n\n"
             "server {\n"
             f"    listen {gateway_port} udp reuseport;\n"  # noqa
-            f"    proxy_pass {ip}:{vpn_port}\n"
+            f"    proxy_pass {ip}:{vpn_port};\n"
             "}\n"
         )
         conf_parts.append(conf_part)
