@@ -1,6 +1,7 @@
 import logging
 import time
-from logging import Formatter, StreamHandler, FileHandler
+from logging import Formatter, StreamHandler
+from logging.handlers import RotatingFileHandler
 from typing import Optional
 
 from .pathes import log_file_path  # type: ignore # noqa
@@ -31,7 +32,13 @@ def setup_logger() -> logging.Logger:
         )
     )
 
-    file_handler = FileHandler(log_file_path)
+    # file_handler = FileHandler(log_file_path)
+    file_handler = RotatingFileHandler(
+        filename=log_file_path,
+        maxBytes=1024 * 1024,  # 1 МБ
+        backupCount=1,  # только 1 бэкап
+        encoding="utf-8",
+    )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(
         UTCFormatter(
@@ -46,5 +53,4 @@ def setup_logger() -> logging.Logger:
     return _logger
 
 
-# TODO: Сделать ещё ротацию логов как-нить
 logger = setup_logger()
