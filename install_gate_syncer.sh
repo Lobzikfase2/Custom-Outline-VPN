@@ -156,8 +156,10 @@ grep -qE '^\* hard nofile' /etc/security/limits.conf || echo "* hard nofile 6553
 
 # 5) Python-зависимости
 info "Установка Python-зависимостей"
-python3 -m pip install --upgrade pip >/dev/null
-python3 -m pip install requests >/dev/null
+#python3 -m pip install --upgrade pip >/dev/null
+#python3 -m pip install requests >/dev/null
+python3 -m pip install --upgrade pip
+python3 -m pip install requests
 log "requests установлен"
 
 # 6) stream.d базовые права
@@ -185,7 +187,7 @@ TMPDIR_PATH="$(mktemp -d)"
 TARBALL_URL="https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/tar.gz/refs/heads/${REPO_BRANCH}"
 TARBALL_PATH="${TMPDIR_PATH}/repo.tar.gz"
 
-curl -fsSL "${TARBALL_URL}" -o "${TARBALL_PATH}"
+sudo curl -fsSL "${TARBALL_URL}" -o "${TARBALL_PATH}"
 tar -xzf "${TARBALL_PATH}" -C "${TMPDIR_PATH}"
 
 TOPDIR="$(find "${TMPDIR_PATH}" -maxdepth 1 -type d -name "${REPO_NAME}-*" | head -n 1)"
