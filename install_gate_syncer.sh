@@ -5,6 +5,7 @@ export PIP_ROOT_USER_ACTION=ignore
 REPO_OWNER="Lobzikfase2"
 REPO_NAME="Custom-Outline-VPN"
 REPO_BRANCH="main"
+GIT_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}.git"
 
 TARGET_BASE="/etc/nginx/stream.d"
 TARGET_DIR="${TARGET_BASE}/gate_syncer"
@@ -73,7 +74,7 @@ info "Установка необходимых пакетов"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 
-REQUIRED_PKGS=(python3 python3-pip cron curl nginx ca-certificates tar)
+REQUIRED_PKGS=(python3 python3-pip cron curl nginx ca-certificates git)
 MISSING=()
 for p in "${REQUIRED_PKGS[@]}"; do
   dpkg -s "$p" >/dev/null 2>&1 || MISSING+=("$p")
@@ -181,21 +182,23 @@ chown root:root "${LOG_FILE}"
 chmod 600 "${LOG_FILE}"
 log "Файл логов создан"
 
-# 8) gate_syncer
-info "Загрузка gate_syncer из репозитория"
+# 8) gate_syncer через git
+info "Загрузка gate_syncer из репозитория через git"
 TMPDIR_PATH="$(mktemp -d)"
-TARBALL_URL="https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/tar.gz/refs/heads/${REPO_BRANCH}"
-TARBALL_PATH="${TMPDIR_PATH}/repo.tar.gz"
 
-OLD_UMASK=$(umask)
-umask 022
-curl -fL "${TARBALL_URL}" -o "${TARBALL_PATH}"
-umask "$OLD_UMASK"
+log "Клонирование репозитория (только нужная папка)..."
+# Клонируем только нужную папку
+git clone --depth 1 --no-checkout --filter=blob:none "${GIT_URL}" "${TMPDIR_PATH}/repo"
+cd "${TMPDIR_PATH}/repo"
+git sparse-checkout init --cone
+git sparse-checkout set gate_syncer
+git checkout "${REPO_BRANCH}"
 
-tar -xzf "${TARBALL_PATH}" -C "${TMPDIR_PATH}"
+SRC_DIR="${TMPDIR_PATH}/repo/gate_syncer"
 
-TOPDIR="$(find "${TMPDIR_PATH}" -maxdepth 1 -type d -name "${REPO_NAME}-*" | head -n 1)"
-SRC_DIR="${TOPDIR}/gate_syncer"
+if [[ ! -d "${SRC_DIR}" ]]; then
+  die "Папка gate_syncer не найдена в репозитории"
+fi
 
 rm -rf "${TARGET_DIR}"
 cp -a "${SRC_DIR}" "${TARGET_DIR}"
