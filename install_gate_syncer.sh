@@ -10,7 +10,7 @@ GIT_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}.git"
 TARGET_BASE="/etc/nginx/stream.d"
 TARGET_DIR="${TARGET_BASE}/gate_syncer"
 DOMAIN_FILE="${TARGET_BASE}/PROXY_DOMAIN"
-LOG_FILE="${TARGET_BASE}/sync.log"
+LOG_FILE="${TARGET_DIR}/sync.log"
 
 log()  { echo -e "[OK]   $*"; }
 info() { echo -e "[INFO] $*"; }
