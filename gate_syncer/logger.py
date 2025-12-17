@@ -7,7 +7,9 @@ from typing import Optional
 from .pathes import log_file_path  # type: ignore # noqa
 
 CONSOLE_LOG_FORMAT = "%(asctime)s | " "line: %(lineno)-3d | " "%(message)s"  # noqa
-FILE_LOG_FORMAT = "%(asctime)s | %(levelname)-8s | " "%(filename)s:%(lineno)d - %(message)s"  # noqa
+FILE_LOG_FORMAT = (
+    "%(asctime)s | %(levelname)-8s | " "%(filename)s:%(lineno)-3d - %(message)s"
+)  # noqa
 
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("requests").setLevel(logging.WARNING)
