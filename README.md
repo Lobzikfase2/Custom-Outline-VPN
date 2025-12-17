@@ -22,18 +22,18 @@ sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-O
 
 ## 🌐 Настройка сервера в качестве шлюза (gate)
 
-Скрипт `install_gates_syncer.sh` используется для настройки сервера в качестве шлюза.
+Скрипт `install_gate_syncer.sh` используется для настройки сервера в качестве шлюза.
 
 ### Базовый запуск (интерактивный ввод домена)
 ```bash
-sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gates_syncer.sh)"
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gate_syncer.sh)"
 ```
 
 ### Запуск с указанием домена через аргумент `--domain`
 Рекомендуется для автоматизированных и headless-установок:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gates_syncer.sh | \
+wget -qO- https://raw.githubusercontent.com/Lobzikfase2/Custom-Outline-VPN/refs/heads/main/install_gate_syncer.sh | \
 sudo bash -s -- --domain "example-proxy.com"
 ```
 
