@@ -80,11 +80,11 @@ def build_nginx_conf_string(servers: List[Dict]) -> str:
         conf_part = (
             "server {\n"
             f"    listen {gateway_port} reuseport;\n"  # noqa
-            f"    proxy_pass {ip}:{vpn_port};\n"
+            f"    proxy_pass {ip}:{vpn_port}\n"
             "}\n\n"
             "server {\n"
             f"    listen {gateway_port} udp reuseport;\n"  # noqa
-            f"    proxy_pass {ip}:{vpn_port};\n"
+            f"    proxy_pass {ip}:{vpn_port}\n"
             "}\n"
         )
         conf_parts.append(conf_part)
@@ -127,8 +127,6 @@ def main() -> None:
         logger.error("Ошибка: домен прокси сервера к боту не задан!")
         return
     sync_url = f"https://{domain}/sync-gateway"
-
-    logger.info("========== ЗАПУСК СИНХРОНИЗАЦИИ ШЛЮЗА ==========")
     logger.info(f"адрес синхронизации: {sync_url}")
 
     sync_data = get_sync_data(url=sync_url)
@@ -155,13 +153,13 @@ def main() -> None:
         mark_as_synced(url=sync_url, state_timestamp=state_timestamp)
     else:
         logger.info("не зафиксировано изменений в системе")
-    logger.info("================================================")
 
 
 # cd /home/coder/Projects/Shadow_God_VPN/Main-Project/dev/gates
 # PYTHONPATH=$(pwd) poetry run python -m gate_syncer.gate_syncer
 # sudo -E env "PATH=$PATH" PYTHONPATH=$(pwd) poetry run python -m gate_syncer.gate_syncer
 if __name__ == "__main__":
+    logger.info("========== ЗАПУСК СИНХРОНИЗАЦИИ ШЛЮЗА ==========")
     logger.info("синхронизация шлюза...")
     # noinspection PyBroadException
     try:
@@ -174,3 +172,5 @@ if __name__ == "__main__":
         logger.warning("синхронизация остановлена")
     except Exception:
         logger.warning("синхронизация была прервана!")
+    finally:
+        logger.info("================================================")
