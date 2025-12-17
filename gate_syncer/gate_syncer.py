@@ -1,7 +1,7 @@
 import os
 import subprocess
 import time
-from typing import Optional
+from typing import Optional, Dict, List
 
 import requests
 
@@ -29,7 +29,7 @@ def read_proxy_domain() -> Optional[str]:
     return None
 
 
-def get_sync_data(url: str) -> Optional[dict]:
+def get_sync_data(url: str) -> Optional[Dict]:
     logger.info(f"запрашиваю данные для синхронизации...")
     return make_safe_request(
         req_func=lambda: requests.get(url, timeout=5), json=True, retries_count=3
@@ -46,7 +46,7 @@ def mark_as_synced(url: str, state_timestamp: float) -> None:
     )
 
 
-def validate_sync_data(data: dict) -> bool:
+def validate_sync_data(data: Dict) -> bool:
     sync_required = data.get("sync_required", None)
     if sync_required is None:
         return False
@@ -60,7 +60,7 @@ def validate_sync_data(data: dict) -> bool:
     servers = data.get("servers", None)
     if not isinstance(servers, list):
         return False
-    server: dict
+    server: Dict
     for server in servers:
         ip = server.get("ip", None)
         vpn_port = server.get("vpn_port", None)
@@ -70,7 +70,7 @@ def validate_sync_data(data: dict) -> bool:
     return True
 
 
-def build_nginx_conf_string(servers: list[dict]) -> str:
+def build_nginx_conf_string(servers: List[Dict]) -> str:
     logger.info("формирую новую строку конфигурации nginx...")
     conf_parts = []
     for server in servers:

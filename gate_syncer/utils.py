@@ -1,12 +1,12 @@
 import time
-from typing import Callable, Optional
+from typing import Callable, Optional, Dict
 
 import requests
 
 
 def make_safe_request(
     req_func: Callable[[], requests.Response], json: bool, retries_count: int
-) -> Optional[dict]:
+) -> Optional[Dict]:
     errors_count = 0
     while errors_count < retries_count:
         try:
