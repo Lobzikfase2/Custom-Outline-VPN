@@ -175,13 +175,6 @@ chown root:root "${DOMAIN_FILE}"
 chmod 600 "${DOMAIN_FILE}"
 log "Файл домена создан"
 
-# 7.5) sync.log
-info "Создание файла логов (root-only)"
-touch "${LOG_FILE}"
-chown root:root "${LOG_FILE}"
-chmod 600 "${LOG_FILE}"
-log "Файл логов создан"
-
 # 8) gate_syncer через git
 info "Загрузка gate_syncer из репозитория через git"
 TMPDIR_PATH="$(mktemp -d)"
