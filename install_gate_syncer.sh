@@ -220,6 +220,15 @@ NEW_CRON="$(echo "${CURRENT_CRON}" | grep -v gate_syncer.gate_syncer | sed '/^[[
 systemctl restart cron 2>/dev/null || service cron restart 2>/dev/null || true
 systemctl restart nginx 2>/dev/null || service nginx restart 2>/dev/null || true
 
+# 11) Первый запуск сразу
+info "Первый запуск gate_syncer..."
+cd "${TARGET_BASE}"
+if python3 -m gate_syncer.gate_syncer; then
+  log "Первый запуск выполнен успешно"
+else
+  warn "Первый запуск завершился с ошибкой"
+fi
+
 log "Установка завершена"
 echo "Сводка:"
 echo "  • Домен: ${DOMAIN_FILE}"
